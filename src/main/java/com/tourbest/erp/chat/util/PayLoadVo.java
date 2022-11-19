@@ -1,4 +1,4 @@
-package com.tourbest.erp.chat;
+package com.tourbest.erp.chat.util;
 
 import lombok.Data;
 

@@ -1,5 +1,6 @@
-package com.tourbest.erp.chat;
+package com.tourbest.erp.chat.util.origin;
 
+import com.tourbest.erp.chat.util.origin.ChatServer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,5 +1,6 @@
 package com.tourbest.erp.chat;
 
+import com.tourbest.erp.chat.util.ChatBridge;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

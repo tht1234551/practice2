@@ -1,19 +1,25 @@
-package com.tourbest.erp.chat;
+package com.tourbest.erp.chat.util;
 
+import com.tourbest.erp.chat.util.origin.ChatServer;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
+import java.util.function.Consumer;
 
 
+@Data
+@Component
 public class SocketHandler {
+
+    private ChatBridge chatBridge;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     private ChatServer chatServer;
@@ -24,9 +30,15 @@ public class SocketHandler {
     private Socket socket;
     private Socket_thread socket_thread;
 
+    private Thread thread;
+
     private List<String> users = new ArrayList<>();
     private List<String> rooms = new ArrayList<>();
     private Map<String, WebSocketSession> map = new HashMap<>();
+
+    Consumer<String> receive;
+    Consumer<String> open;
+    Consumer<String> close;
 
 
 
@@ -38,7 +50,8 @@ public class SocketHandler {
             outputStream = socket.getOutputStream();
             dataOutputStream = new DataOutputStream(outputStream);
             socket_thread = new Socket_thread();
-
+            thread = new Thread(socket_thread);
+            thread.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,8 +154,9 @@ public class SocketHandler {
         }
 
         public void listen() throws IOException {
-            String a = dataInputStream.readUTF();
-            chatServer.messageListener(a);
+            String payload = dataInputStream.readUTF();
+//            chatServer.messageListener(a);
+            receive.accept(payload);
         }
 
         public void close() {

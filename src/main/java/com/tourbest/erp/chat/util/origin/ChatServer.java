@@ -1,4 +1,4 @@
-package com.tourbest.erp.chat;
+package com.tourbest.erp.chat.util.origin;
 
 import lombok.Data;
 import org.slf4j.Logger;

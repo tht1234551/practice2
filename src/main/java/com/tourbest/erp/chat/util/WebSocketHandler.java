@@ -1,8 +1,10 @@
-package com.tourbest.erp.chat;
+package com.tourbest.erp.chat.util;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -14,7 +16,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @Data
+@Component
 public class WebSocketHandler extends TextWebSocketHandler {
+
+    private ChatBridge chatBridge;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     BiConsumer<WebSocketSession, String> receive;
