@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tourbest.erp.common.CodeUtilDAO">
+
+	<select id="selectCodeList" parameterType="CodeUtilVO" resultType="CodeUtilVO">
+	/* common.selectCodeList - 코드 목록 조회 */
+		SELECT *
+		FROM SYS_COMMON_CD_TB
+		WHERE COM_ID = #{comId }
+			AND COMM_TP = #{commTp}
+			AND USE_YN = 'Y'
+		ORDER BY SEQ_NO
+	</select>
+
+	<!-- id의 경우에는 Mapper.java에 동일하게 사용해야된다. -->
+	<select id="selectCodeListHi" parameterType="CodeUtilVO" resultType="CodeUtilVO">
+	/* common.selectCodeListHi - 상위 코드 목록 조회 */
+		SELECT *
+		FROM SYS_COMMON_CD_TB
+		WHERE  COM_ID = #{comId }
+			AND COMM_TP = #{commTp }
+			AND COMM_CD_HI = #{commCdHi }
+			AND USE_YN = 'Y'
+		ORDER BY SEQ_NO
+	</select>
+		
+
+</mapper>

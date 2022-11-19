@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tourbest.erp.mediaction.MediDAO">
+	
+	<resultMap type="com.tourbest.erp.mediation.UserVo" id="userVo">
+		<result property="userId" column="USER_ID"/>
+		<result property="userPw" column="USER_PW"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="userPhone1" column="USER_PHONE1"/>
+		<result property="userPhone2" column="USER_PHONE2"/>
+		<result property="userPost" column="USER_POST"/>
+		<result property="userAddr" column="USER_ADDR"/>
+		<result property="userAuth" column="USER_AUTH"/>
+	</resultMap>
+	
+	<resultMap type="com.tourbest.erp.mediation.CompVo" id="compVo">
+		<result property="compIdx" column="COMP_IDX"/>
+		<result property="userIdx" column="USER_IDX"/>
+		<result property="catIdx" column="CAT_IDX"/>
+		<result property="compName" column="COMP_NAME"/>
+		<result property="compCeo" column="COMP_CEO"/>
+		<result property="compNumber" column="COMP_NUMBER"/>
+		<result property="compPhone" column="COMP_PHONE"/>
+		<result property="compPost" column="COMP_POST"/>
+		<result property="compAddr" column="COMP_ADDR"/>
+		<result property="compUrl" column="COMP_URL"/>
+		<result property="compComment" column="COMP_COMMENT"/>
+	</resultMap>
+
+	<resultMap type="com.tourbest.erp.mediation.GoodsVo" id="goodsVo">
+		<result property="goodsIdx" column="GOODS_IDX"/>
+		<result property="compIdx" column="COMP_IDX"/>
+		<result property="goodsName" column="GOODS_NAME"/>
+		<result property="goodsPrice" column="GOODS_PRICE1"/>
+		<result property="goodsComment" column="GOODS_COMMENT"/>
+		<result property="goodsInven" column="GOODS_INVEN"/>
+		<result property="goodsDis" column="GOODS_DIS"/>
+		<result property="goodsImg" column="GOODS_IMG"/>
+		<result property="rowNum" column="ROW_NUM"/>
+	</resultMap>
+	
+	<resultMap type="com.tourbest.erp.mediation.DealVo" id="dealVo">
+		<result property="dealIdx" column="DEAL_IDX"/>
+		<result property="dealStatus" column="DEAL_STATUS"/>
+		<result property="compIdx" column="COMP_IDX"/>
+		<result property="userIdx" column="USER_IDX"/>
+		<result property="rowNum" column="ROW_NUM"/>
+		<association property="dealGoodVo" resultMap="dealGoodVo"></association>
+		<association property="goodsVo" resultMap="goodsVo"></association>
+	</resultMap>
+	
+	<resultMap type="com.tourbest.erp.mediation.DealGoodVo" id="dealGoodVo">
+		<result property="dealGoodIdx" column="DEAL_GOOD_IDX"/>
+		<result property="dealIdx" column="DEAL_IDX"/>
+		<result property="goodsIdx" column="GOODS_IDX"/>
+		<result property="dealGoodCnt" column="DEAL_GOOD_CNT"/>
+	</resultMap>
+	
+	
+	
+	
+	
+	<insert id="insert">
+		INSERT INTO user_info
+		VALUES
+		(
+			null
+			,#{userId}
+			,#{userPw}
+			,#{userName}
+			,#{userPhone1}
+			,#{userPhone2}
+			,#{userPost}
+			,#{userAddr}
+			,#{userAuth}
+			,now()
+			,now()
+		)
+	</insert>
+	
+	<select id="selectUser" resultMap = "userVo">
+		
+		select 
+			*
+		from user_info
+		where USER_ID = #{userId}
+		AND USER_PW = #{userPw}
+		
+	</select>
+	
+	<select id="selectComp" resultMap = "compVo">
+		
+		select 
+			*
+		from comp_info
+		where USER_IDX = #{userIdx}
+		
+	</select>
+		
+	<insert id="insertComp">	
+		insert into comp_info
+		values(
+			null
+			,#{userIdx}
+			,#{catIdx}
+			,#{compName}
+			,#{compCeo}
+			,#{compNumber}
+			,#{compPhone}
+			,#{compPost}
+			,#{compAddr}
+			,#{compUrl}
+			,#{compComment}
+			,now()
+			,now()
+		)	
+	</insert>
+	
+	<update id="updateComp">
+		update comp_info 
+		set
+			COMP_NAME = #{compName}
+			,COMP_CEO = #{compCeo}
+			,COMP_NUMBER = #{compNumber}
+			,COMP_PHONE = #{compPhone}
+			,COMP_POST = #{compPost}
+			,COMP_ADDR = #{compAddr}
+			,COMP_URL = #{compUrl}
+			,COMP_COMMENT = #{compComment}
+			,MODIFIED_TIME = now()
+		where COMP_IDX = #{compIdx}
+		and USER_IDX = #{userIdx}
+	</update>
+	
+	<select id="selectGoods" resultMap = "goodsVo">
+		
+		select 
+			a.*, FORMAT(goods_price , 0) as GOODS_PRICE1, @ROWNUM := @ROWNUM + 1 AS ROW_NUM
+		from goods_info a , (SELECT @ROWNUM := 0 ) b
+		<choose>
+			<when test="compIdx != null">
+				where COMP_IDX = #{compIdx}
+			</when>
+			<otherwise>
+				where GOODS_DIS = 'Y'
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="selectGoodsDetail" resultMap = "goodsVo">
+		
+		select 
+			*
+			, FORMAT(goods_price , 0) as GOODS_PRICE1
+		from goods_info
+		where GOODS_IDX = #{goodsIdx}
+		<if test="compIdx != null">
+			and COMP_IDX = #{compIdx}
+		</if>
+	
+		
+		
+	</select>
+	
+	<insert id="insertGoods">
+		INSERT INTO goods_info
+		VALUES
+		(
+			null
+			,#{compIdx}
+			,#{goodsName}
+			,#{goodsPrice}
+			,#{goodsComment}
+			,#{goodsInven}
+			,#{goodsDis}
+			,#{goodsImg}
+			,now()
+			,now()
+		)
+	</insert>
+	
+	<update id="updateGoods">
+		update goods_info 
+		set
+			GOODS_NAME = #{goodsName}
+			,GOODS_PRICE = #{goodsPrice}
+			,GOODS_COMMENT = #{goodsComment}
+			,GOODS_INVEN = #{goodsInven}
+			,GOODS_DIS = #{goodsDis}
+			,GOODS_IMG = #{goodsImg}
+			,MODIFIED_TIME = now()
+		where GOODS_IDX = #{goodsIdx}
+		and COMP_IDX = #{compIdx}
+	</update>
+	
+	
+	<insert id="insertDeal" useGeneratedKeys="true" keyProperty="dealIdx">
+		insert into deal_info
+		values(
+			#{dealIdx}
+			,'S'
+			,#{compIdx}
+			,#{userIdx}
+			,now()
+			,now()
+		)
+	</insert>
+	
+	<insert id="insertDealGood" >
+		insert into deal_good
+		values(
+			null
+			,#{dealIdx}
+			,#{goodsIdx}
+			,#{dealGoodCnt}
+			,now()
+			,now()
+		)
+	</insert>
+	
+	<select id="selectDeal" resultMap="dealVo">
+		SELECT * ,@ROWNUM := @ROWNUM + 1 AS ROW_NUM
+		FROM deal_info a, deal_good b, goods_info c, (SELECT @ROWNUM := 0 ) d
+		WHERE a.DEAL_IDX = b.DEAL_IDX
+		AND a.COMP_IDX = c.COMP_IDX
+		AND b.GOODS_IDX  = c.GOODS_IDX
+		<choose>
+			<when test="compIdx != null">
+				AND a.COMP_IDX = #{compIdx}
+			</when>
+			<otherwise>
+				AND a.USER_IDX = #{userIdx}
+			</otherwise>
+		</choose>
+	</select>
+	
+</mapper>

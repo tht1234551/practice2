@@ -1,0 +1,33 @@
+@charset 'utf-8';
+
+@import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css); 
+@import url(https://cdn.rawgit.com/hiun/NanumSquare/master/nanumsquare.css);
+
+/**
+	메인프레임 공용으로 사용되는 StyleSheet
+**/
+
+body,p,div,h1,h2,h3,h4,h5,h6,ul,ol,dl,dt,dd,table,caption,form,fieldset,legend,input{margin:0; padding:0}
+li{list-style-type:none}
+fieldset,img{border:0}
+li img, li a, dd img, img, a img{vertical-align:top}
+.hdd{width:0; height:0; line-height:0; font-size:0; line-height:0; visibility:hidden; overflow:hidden}
+legend,caption{width:0; height:0; line-height:0; font-size:0; line-height:0; visibility:hidden; overflow:hidden}
+
+body{ font-family:Nanum Square; font-family:Malgun Gothic !important; font-size:12px; letter-spacing:-0.03em; color:#777; 
+		overflow-y: hidden; overflow-x: hidden; }
+ 
+/* 프레임 css */
+div.frameTitle{ padding:0px; margin:0px; display:block; height:30px; display: inline;
+    width: 230px;
+    position: absolute;
+    top: 0px;}
+div.frameTitle > div { padding:0px; margin:0px; display:inline-block; border:solid 0px red; height:30px;  }
+div.frameTitle > div:nth-child(1){width:230px; background-color:#000; color:#fff; text-align:center;  float:left;  line-height:30px; }
+
+
+/* icons */
+.tob-free-icons-folder{ background: url('/tob_links/icons/freeUI/icons8-add-folder-50.png'); }
+
+/* 부트스트랩 확장  CSS */
+ .input-xs { height:22px; }

@@ -1,0 +1,84 @@
+server:
+  port: 80
+
+spring:  
+  devtools:
+    livereload:
+      enabled: true
+  application: 
+    name: TOUR-BEST-ERP
+  datasource:
+    platform: mariadb
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    #driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:log4jdbc:mariadb://127.0.0.1:3306/test
+    
+    username: root
+    password: 1234
+    
+    hikari:
+      connection-timeout: '60000'
+      maximum-pool-size: '10'
+    
+    tomcat:
+      initial-size: '20'
+      max-active: '50'
+      max-idle: '20'
+      max-wait: '10000'
+      min-idle: '10'
+      test-on-borrow: 'true' #연결유지 테스트 :: True
+      
+      validation-interval: 34000 #34초
+      validation-query: SELECT 1 #실행쿼리
+    
+    
+---
+spring:
+  autoconfigure:
+    exclude:
+    - org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration
+---
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+---
+mybatis:
+  configuration:
+    default-fetch-size: '150'
+    default-statement-timeout: '30'
+    map-underscore-to-camel-case: 'true'
+  mapper-locations: classpath:mapper/**/**.xml
+  type-aliases-package: com.tourbest.erp
+---
+spring:
+  servlet:
+    multipart:
+      max-file-size: 60MB   #업로드 가능한 최대크기
+      max-request-size: 60MB #업로드 가능한 총 요청크기
+
+---
+spring:
+  mvc:
+    static-path-pattern: /uploadImg/**
+  resources:
+    static-locations: classpath:/uploadImg/
+    add-mappings: true    
+---
+#xss accept url
+xss.acceptUrls: /intranet/issue/write/add
+
+---
+custom: 
+  imgUrl: /statics/images   #기본 이미지 URL
+  imgPath: /statics/images  #기본 이미지 Path
+    
+  kisaSeedEcbKey: SINBOMUL@GMAIL.COM  #양방향 암호화 KEY  :: 변경금지
+  
+  comDataFilePath: F:\newtour\workspace\tourbest.erp\src\main\webapp\com_data  #고객사 자료가 저장되는 root 폴더 파일 패스
+  comDataFileUrl: http://www.tourbesterp.com/com_data
+  
+  

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<!-- Templates -->
+
+	<!-- 통합 프레임 레이아웃 -->
+	<definition name="board" template="/WEB-INF/tiles/layout/board.jsp">
+		<put-attribute name="body" value="" /><!-- 내용 -->
+		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" /><!-- 내용 -->
+		<put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" /><!-- 내용 -->
+	</definition>
+	<!-- Templates End -->
+
+	<!-- Pages -->
+
+	<!-- 메인 >> 프레임 셋트 -->
+	<definition name="board.*" extends="board">
+		<put-attribute name="body" value="/WEB-INF/views/board/{1}.jsp" />
+	</definition>
+	
+	<!-- 메인 >> 프레임 셋트 -->
+<!-- 	<definition name="medi.*"  template="/WEB-INF/tiles/layout/medi.jsp"> -->
+<!-- 		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />내용 -->
+<!-- 		<put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />내용 -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/mediation/{1}.jsp" /> -->
+<!-- 	</definition> -->
+	<definition name="medi.*" extends="board">
+		<put-attribute name="body" value="/WEB-INF/views/mediation/{1}.jsp" />
+	</definition>
+	<definition name="excel.*" extends="board">
+		<put-attribute name="body" value="/WEB-INF/views/excel/{1}.jsp" />
+	</definition>
+	
+	
+</tiles-definitions>
