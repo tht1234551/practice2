@@ -14,8 +14,6 @@ public class ChatController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ChatServer chatServer;
-    private final ChatClient client;
-
 
     @RequestMapping(value = "/view")
     public String view() {
@@ -24,7 +22,7 @@ public class ChatController {
 
     @RequestMapping(value = "/list")
     public String list(Model model) {
-        model.addAttribute("list", chatServer.getUserList());
+        model.addAttribute("list", chatServer.getVector_user_list());
 
         return null;
     }
@@ -32,12 +30,7 @@ public class ChatController {
 
     @RequestMapping(value = "/connect")
     public String connect(String ip, int port, String id) {
-        System.out.println(ip);
-        System.out.println(port);
-        System.out.println(id);
-
-        client.network(ip, port, id);
-
+        chatServer.network(ip, port, id);
         return "redirect:/chat/list";
     }
 

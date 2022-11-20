@@ -1,29 +1,23 @@
 package com.tourbest.erp.chat;
 
-import javax.swing.*;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.Socket;
 
+@RequiredArgsConstructor
 public class Socket_thread implements Runnable {
 
-    InputStream inputStream;
-    DataInputStream dataInputStream;
-    OutputStream outputStream;
-    DataOutputStream dataOutputStream;
-    Socket socket;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final InputStream inputStream;
+    private final DataInputStream dataInputStream;
+    private final OutputStream outputStream;
+    private final DataOutputStream dataOutputStream;
+    private final Socket socket;
 
-    public Socket_thread(InputStream inputStream,
-                         DataInputStream dataInputStream,
-                         OutputStream outputStream,
-                         DataOutputStream dataOutputStream,
-                         Socket socket) {
-        this.inputStream = inputStream;
-        this.dataInputStream = dataInputStream;
-        this.outputStream = outputStream;
-        this.dataOutputStream = dataOutputStream;
-        this.socket = socket;
 
-    }
 
     public void run() {
         // TODO Auto-generated method stub
@@ -42,8 +36,9 @@ public class Socket_thread implements Runnable {
                     dataOutputStream.close();
                     socket.close();
 
-                    JOptionPane.showMessageDialog(null, "서버와 접속 끊어짐", "알림", JOptionPane.ERROR_MESSAGE);
-                } catch (IOException e1) {
+                    logger.info("서버와 접속 끊어짐");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
                 }
                 break;
 
