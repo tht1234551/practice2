@@ -1,8 +1,10 @@
 package com.tourbest.erp.mediation;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class UserVo extends CompVo{
 	
 	private String userIdx;

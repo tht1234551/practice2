@@ -1,17 +1,31 @@
 package com.tourbest.erp.chat;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/chat")
+@RequiredArgsConstructor
 public class ChatController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final ChatServer chatServer;
+    private final ChatClient client;
+
+
     @RequestMapping(value = "/view")
     public String view() {
+        return null;
+    }
+
+    @RequestMapping(value = "/list")
+    public String list(Model model) {
+        model.addAttribute("list", chatServer.getUserList());
+
         return null;
     }
 
@@ -22,10 +36,9 @@ public class ChatController {
         System.out.println(port);
         System.out.println(id);
 
-        ChatClient client = new ChatClient();
-        client.network(ip, port);
+        client.network(ip, port, id);
 
-        return null;
+        return "redirect:/chat/list";
     }
 
 
