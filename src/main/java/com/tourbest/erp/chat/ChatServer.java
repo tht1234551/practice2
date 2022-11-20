@@ -44,12 +44,21 @@ public class ChatServer {
         vector_user_list.add(id);
     }
 
-    public void close() throws Exception {
-        outputStream.close();
-        inputStream.close();
-        dataInputStream.close();
-        dataOutputStream.close();
-        socket.close();
+    public void removeUserList(String id) {
+        vector_user_list.remove(id);
+    }
+
+    public void close(String id) {
+        try {
+            removeUserList(id);
+            outputStream.close();
+            inputStream.close();
+            dataInputStream.close();
+            dataOutputStream.close();
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void send_message(String message) {

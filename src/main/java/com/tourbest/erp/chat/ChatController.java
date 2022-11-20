@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/chat")
@@ -29,9 +30,16 @@ public class ChatController {
 
 
     @RequestMapping(value = "/connect")
-    public String connect(String ip, int port, String id) {
+    public String connect(String ip, int port, String id, RedirectAttributes rttr) {
         chatServer.network(ip, port, id);
+        rttr.addFlashAttribute("id", id);
         return "redirect:/chat/list";
+    }
+
+    @RequestMapping(value = "/disconnect")
+    public String disconnect(String id) {
+        chatServer.close(id);
+        return "redirect:/chat/view";
     }
 
 

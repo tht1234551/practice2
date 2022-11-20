@@ -13,6 +13,12 @@
 <body>
 list
 ${list}
+<button id="disconnect">disconnect</button>
 </body>
-
+<script>
+    document.querySelector('#disconnect').addEventListener('click', function (e) {
+        const queryString = '?id=${id}'
+        location.href = '/chat/disconnect' + queryString;
+    })
+</script>
 </html>
