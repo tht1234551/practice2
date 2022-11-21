@@ -23,8 +23,8 @@ public class ChatController {
 
     @RequestMapping(value = "/list")
     public String list(Model model) {
-        model.addAttribute("list", chatServer.getVector_user_list());
-
+        model.addAttribute("users", chatServer.getVector_user_list());
+        model.addAttribute("rooms", chatServer.getVector_room_list());
         return null;
     }
 

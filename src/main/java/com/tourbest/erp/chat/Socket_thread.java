@@ -11,6 +11,8 @@ import java.net.Socket;
 public class Socket_thread implements Runnable {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final ChatServer chatServer;
     private final InputStream inputStream;
     private final DataInputStream dataInputStream;
     private final OutputStream outputStream;
@@ -23,10 +25,9 @@ public class Socket_thread implements Runnable {
         // TODO Auto-generated method stub
         while (true) {
             try {
-
 //                InMessage(dataInputStream.readUTF());
                 String a = dataInputStream.readUTF();
-                System.out.println(a);
+                chatServer.messageListener(a);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 try {
