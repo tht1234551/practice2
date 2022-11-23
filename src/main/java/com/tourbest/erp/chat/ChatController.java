@@ -18,21 +18,17 @@ public class ChatController {
 
     @RequestMapping(value = "/view")
     public String view() {
-        return null;
+        return "/chat/view";
     }
 
     @RequestMapping(value = "/list")
     public String list(Model model) {
-        model.addAttribute("users", chatServer.getVector_user_list());
-        model.addAttribute("rooms", chatServer.getVector_room_list());
-        return null;
+        return "/chat/list";
     }
 
-
     @RequestMapping(value = "/connect")
-    public String connect(String ip, int port, String id, RedirectAttributes rttr) {
+    public String connect(String ip, int port, String id) {
         chatServer.network(ip, port, id);
-        rttr.addFlashAttribute("id", id);
         return "redirect:/chat/list";
     }
 
