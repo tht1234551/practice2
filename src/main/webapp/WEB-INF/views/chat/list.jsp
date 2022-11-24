@@ -13,6 +13,9 @@
     <title>Title</title>
 </head>
 <body>
+
+<input id="id" value="${pageContext.session.getAttribute("id")}" hidden>
+
 <table border="1">
     <tr>
         <td width="100">
@@ -37,10 +40,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <select name="user" id="room" size="10" style="width: 100%;">
-                            <c:forEach items="${rooms}" var="room">
-                                <option>${room}</option>
-                            </c:forEach>
+                        <select name="room" id="rooms" size="10" style="width: 100%;">
+
                         </select>
                     </td>
                 </tr>
@@ -79,71 +80,7 @@
 </table>
 
 <button id="disconnect">disconnect</button>
+<script src="${pageContext.request.contextPath}/js/views/chat/list.js"></script>
 
 </body>
-<script>
-    const id = '${pageContext.session.getAttribute("id")}';
-    const websocket = new WebSocket("ws://localhost/chat?id=" + id);
-
-    websocket.onopen = function (e) {
-
-    };
-
-    document.querySelector('#disconnect').addEventListener('click', function (e) {
-        const queryString = '?id=' + id
-        location.href = '/chat/disconnect' + queryString;
-    })
-
-    /**
-     *
-     * @param {MessageEvent} payload
-     */
-    websocket.onmessage = function (payload) {
-        console.log(payload.data);
-        socketListener(payload.data)
-    };
-    // websocket.onclose = onClose;
-
-    /**
-     *
-     * @param {String} payload
-     */
-    function socketListener(payload) {
-        const [protocol, message] = payload.split("/")
-
-        switch (protocol) {
-            case "OldUser":
-            case "NewUser":
-                appendOption(document.querySelector('#users'), message);
-                break;
-            case "UserOut":
-                removeOption(document.querySelector('#users'), message)
-            default:
-                break;
-        }
-    }
-
-    /**
-     * @param {HTMLElement} element
-     * @param {String} value
-     */
-    function appendOption(element, value) {
-        const option = document.createElement('option');
-        option.text = value;
-        element.append(option);
-    }
-
-    /**
-     * @param {HTMLElement} element
-     * @param {String} value
-     */
-    function removeOption(element, value) {
-        const arr = [...element.children];
-        const findOne = arr.filter(x => x.text === value);
-
-        if(findOne.length) {
-            findOne[0].remove();
-        }
-    }
-</script>
 </html>

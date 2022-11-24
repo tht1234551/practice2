@@ -29,6 +29,7 @@ public class ChatServer extends TextWebSocketHandler {
     private Thread thread;
 
     private List<String> users = new ArrayList<>();
+    private List<String> rooms = new ArrayList<>();
     private Map<String, WebSocketSession> map = new HashMap<>();
 
     private String ip;
@@ -62,7 +63,7 @@ public class ChatServer extends TextWebSocketHandler {
 
     /**
      * 윈도우 서버에 보내기
-     * 
+     *
      * @param message
      */
     public void send_message(String message) {
@@ -75,7 +76,7 @@ public class ChatServer extends TextWebSocketHandler {
 
     /**
      * 스프링 서버가 받기
-     * 
+     *
      * @param response
      */
     public void messageListener(String response) {
@@ -93,11 +94,12 @@ public class ChatServer extends TextWebSocketHandler {
             case "UserOut":
                 users.remove(message);
                 break;
+            case "OldRoom":
             case "NewRoom":
-//                vector_room_list.add(message);
+                rooms.add(message);
                 break;
             case "ExitRoom":
-//                vector_room_list.remove(message);
+                rooms.remove(message);
                 break;
             default:
                 try {
@@ -151,9 +153,6 @@ public class ChatServer extends TextWebSocketHandler {
         String key = stringTokenizer.nextToken();
         String value = stringTokenizer.nextToken();
 
-        map.put(value, session);
-        messageListener("NewUser/" + value);
-
         try {
             users = new ArrayList<>();
             users.add(value);
@@ -163,6 +162,9 @@ public class ChatServer extends TextWebSocketHandler {
             dataInputStream = new DataInputStream(inputStream);
             outputStream = socket.getOutputStream();
             dataOutputStream = new DataOutputStream(outputStream);
+
+            map.put(value, session);
+            messageListener("NewUser/" + value);
 
             send_message(value);
 

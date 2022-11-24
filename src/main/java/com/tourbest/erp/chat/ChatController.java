@@ -31,12 +31,4 @@ public class ChatController {
         chatServer.network(ip, port, id);
         return "redirect:/chat/list";
     }
-
-    @RequestMapping(value = "/disconnect")
-    public String disconnect(String id) {
-        chatServer.close(id);
-        return "redirect:/chat/view";
-    }
-
-
 }
