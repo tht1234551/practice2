@@ -8,21 +8,21 @@ window.onload = function () {
 function init() {
     const id = document.querySelector("#id").value;
 
-    const app = new ChattingApplication(id);
-    app.connect();
+    const app = new ChattingApplication({rooms: "#rooms", users: "#users"});
+    app.connect(id);
     app.addEventListener();
 }
 
 const EVENT_TYPE = {
-    USER : {
+    USER: {
         LIST: "OldUser".toUpperCase(),
         JOIN: "NewUser".toUpperCase(),
         EXIT: "UserOut".toUpperCase(),
     },
-    ROOM : {
-        LIST : "OldRoom".toUpperCase(),
-        JOIN : "NewRoom".toUpperCase(),
-        EXIT : "ExitRoom".toUpperCase(),
+    ROOM: {
+        LIST: "OldRoom".toUpperCase(),
+        JOIN: "NewRoom".toUpperCase(),
+        EXIT: "ExitRoom".toUpperCase(),
     }
 }
 
@@ -37,25 +37,26 @@ class ChattingApplication {
     rooms;
     users;
 
-
-
     /**
-     * @param {String} id
+     *
+     * @param {String} rooms
+     * @param {String} users
      */
-    constructor(id) {
+    constructor({rooms, users}) {
         self = this;
 
-        this.id = id;
-        this.rooms = this.optionMaker("#rooms");
-        this.users = this.optionMaker("#users");
+        this.rooms = this.optionMaker(rooms);
+        this.users = this.optionMaker(users);
     }
 
 
     /**
      * 소켓 연결
+     *
+     * @param {String} id
      */
-    connect() {
-        this.websocket = new WebSocket("ws://localhost/chat?id=" + this.id)
+    connect(id) {
+        this.websocket = new WebSocket("ws://localhost/chat?id=" + id)
     }
 
     addEventListener() {
