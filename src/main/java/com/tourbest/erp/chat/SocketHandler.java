@@ -25,24 +25,12 @@ public class SocketHandler {
     private String ip;
     private int port;
 
-    public void openSocket() {
+    public void openSocket(String ip, int port) {
         try {
             socket = new Socket(ip, port);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setSessionParams(String ip, int port, String id) {
-        this.ip = ip;
-        this.port = port;
-
-        getSession().setAttribute("id", id);
-    }
-
-    public HttpSession getSession() {
-        ServletRequestAttributes servletRequestAttribute = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        return servletRequestAttribute.getRequest().getSession();
     }
 
     public void close(String id) {

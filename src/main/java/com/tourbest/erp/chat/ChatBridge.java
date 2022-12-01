@@ -1,5 +1,6 @@
 package com.tourbest.erp.chat;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,14 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ChatBridge extends WebSocketHandler {
+@Data
+public class ChatBridge {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private String ip;
+    private int port;
+    private String id;
 
     private List<String> users = new ArrayList<>();
     private List<String> rooms = new ArrayList<>();
 
-    SocketHandler socketHandler = new SocketHandler();
+    private SocketHandler socketHandler = new SocketHandler();
+    private WebSocketHandler webSocketHandler = new WebSocketHandler();
 
     public ChatBridge() {
         openWebSocket();
@@ -25,16 +32,16 @@ public class ChatBridge extends WebSocketHandler {
     }
 
     public void openWebSocket() {
-        super.setOpen(payload -> {
+        webSocketHandler.setOpen(payload -> {
             logger.info("클라이언트 접속");
             PayLoadVo payLoadVo = new PayLoadVo(payload);
             users.add(payLoadVo.getValue());
-            socketHandler.openSocket();
+            socketHandler.openSocket(ip, port);
         });
     }
 
     public void closeWebSocket() {
-        super.setClose(payload -> {
+        webSocketHandler.setClose(payload -> {
             logger.info("클라이언트 닫힘");
             PayLoadVo payLoadVo = new PayLoadVo(payload);
             users.remove(payLoadVo.getValue());
@@ -42,7 +49,7 @@ public class ChatBridge extends WebSocketHandler {
     }
 
     public void receiveWebSocket() {
-        super.setReceive(payload -> {
+        webSocketHandler.setReceive(payload -> {
             logger.info("");
             PayLoadVo payLoadVo = new PayLoadVo(payload);
         });

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ChatController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final ChatServer chatServer;
+    private final ChatBridge chatBridge;
 
     @RequestMapping(value = "/view")
     public String view() {
@@ -28,7 +28,9 @@ public class ChatController {
 
     @RequestMapping(value = "/connect")
     public String connect(String ip, int port, String id) {
-        chatServer.network(ip, port, id);
+        chatBridge.setIp(ip);
+        chatBridge.setPort(port);
+        chatBridge.setId(id);
         return "redirect:/chat/list";
     }
 }
