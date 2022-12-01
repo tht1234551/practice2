@@ -15,7 +15,7 @@ public class ChatBridge extends WebSocketHandler {
 
     private List<String> users = new ArrayList<>();
     private List<String> rooms = new ArrayList<>();
-    WebSocketHandler webSocketHandler = new WebSocketHandler();
+
     SocketHandler socketHandler = new SocketHandler();
 
     public ChatBridge() {
@@ -25,15 +25,16 @@ public class ChatBridge extends WebSocketHandler {
     }
 
     public void openWebSocket() {
-        webSocketHandler.setOpen(payload -> {
+        super.setOpen(payload -> {
             logger.info("클라이언트 접속");
             PayLoadVo payLoadVo = new PayLoadVo(payload);
             users.add(payLoadVo.getValue());
+            socketHandler.openSocket();
         });
     }
 
     public void closeWebSocket() {
-        webSocketHandler.setClose(payload -> {
+        super.setClose(payload -> {
             logger.info("클라이언트 닫힘");
             PayLoadVo payLoadVo = new PayLoadVo(payload);
             users.remove(payLoadVo.getValue());
@@ -41,7 +42,7 @@ public class ChatBridge extends WebSocketHandler {
     }
 
     public void receiveWebSocket() {
-        webSocketHandler.setReceive(payload -> {
+        super.setReceive(payload -> {
             logger.info("");
             PayLoadVo payLoadVo = new PayLoadVo(payload);
         });

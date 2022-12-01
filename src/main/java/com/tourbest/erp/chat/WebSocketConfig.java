@@ -1,20 +1,20 @@
 package com.tourbest.erp.chat;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 @Configuration
-@RequiredArgsConstructor
+@AllArgsConstructor
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final ChatServer chatServer;
+    private ChatBridge chatBridge;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatServer, "chat").setAllowedOrigins("*");
+        registry.addHandler(chatBridge, "chat").setAllowedOrigins("*");
     }
 }

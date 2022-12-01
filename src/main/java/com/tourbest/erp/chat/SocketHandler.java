@@ -1,33 +1,22 @@
 package com.tourbest.erp.chat;
 
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class SocketHandler {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private InputStream inputStream;
-    private DataInputStream dataInputStream;
-    private OutputStream outputStream;
-    private DataOutputStream dataOutputStream;
     private Socket socket;
-    private Thread thread;
 
     private List<String> users = new ArrayList<>();
     private List<String> rooms = new ArrayList<>();
@@ -36,7 +25,15 @@ public class SocketHandler {
     private String ip;
     private int port;
 
-    public void network(String ip, int port, String id) {
+    public void openSocket() {
+        try {
+            socket = new Socket(ip, port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setSessionParams(String ip, int port, String id) {
         this.ip = ip;
         this.port = port;
 
@@ -52,10 +49,7 @@ public class SocketHandler {
         try {
             messageListener("UserOut/" + id);
             users.remove(id);
-            outputStream.close();
-            inputStream.close();
-            dataInputStream.close();
-            dataOutputStream.close();
+
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +63,8 @@ public class SocketHandler {
      */
     public void send_message(String message) {
         try {
-            dataOutputStream.writeUTF(message);
+//            dataOutputStream.writeUTF(message);
+            throw new IOException();
         } catch (IOException e) {
             e.printStackTrace();
         }
