@@ -27,7 +27,10 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/connect")
-    public String connect(String ip, int port, String id) {
+    public String connect(String ip, int port, String id, RedirectAttributes rttr) {
+        rttr.addFlashAttribute("ip", ip);
+        rttr.addFlashAttribute("port", port);
+        rttr.addFlashAttribute("id", id);
         chatBridge.setIp(ip);
         chatBridge.setPort(port);
         chatBridge.setId(id);

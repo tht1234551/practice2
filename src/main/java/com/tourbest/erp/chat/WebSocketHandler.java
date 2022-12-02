@@ -10,15 +10,17 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.Objects;
 import java.util.StringTokenizer;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @Data
 public class WebSocketHandler extends TextWebSocketHandler {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    Consumer<String> receive;
-    Consumer<String> open;
-    Consumer<String> close;
+    BiConsumer<WebSocketSession, String> receive;
+    BiConsumer<WebSocketSession, String> open;
+    BiConsumer<WebSocketSession, String> close;
+
 
 
 
@@ -30,7 +32,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
 //        broadCast(message);
 
-        receive.accept(payload);
+        receive.accept(session, payload);
     }
 
     /* Client 가 접속 시 호출되는 메서드 */
@@ -66,7 +68,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 //            e.printStackTrace();
         }
 
-        open.accept(payload);
+        open.accept(session, payload);
     }
 
     /* Client 가 접속 해제 시 호출되는 메서드드 */
@@ -88,6 +90,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
 //        close(value);
 //        thread.interrupt();
 
-        close.accept("UserOut/" + value);
+        close.accept(session,"UserOut/" + value);
     }
 }

@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<input id="id" value="${pageContext.session.getAttribute("id")}" hidden>
+<input id="id" value="${id}" hidden>
 
 <table border="1">
     <tr>

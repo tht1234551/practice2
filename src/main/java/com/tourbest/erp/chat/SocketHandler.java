@@ -16,18 +16,29 @@ import java.util.*;
 public class SocketHandler {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
+    private ChatServer chatServer;
+    private InputStream inputStream;
+    private DataInputStream dataInputStream;
+    private OutputStream outputStream;
+    private DataOutputStream dataOutputStream;
     private Socket socket;
+    private Socket_thread socket_thread;
 
     private List<String> users = new ArrayList<>();
     private List<String> rooms = new ArrayList<>();
     private Map<String, WebSocketSession> map = new HashMap<>();
 
-    private String ip;
-    private int port;
+
 
     public void openSocket(String ip, int port) {
         try {
             socket = new Socket(ip, port);
+            inputStream = socket.getInputStream();
+            dataInputStream = new DataInputStream(inputStream);
+            outputStream = socket.getOutputStream();
+            dataOutputStream = new DataOutputStream(outputStream);
+            socket_thread = new Socket_thread();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,8 +62,7 @@ public class SocketHandler {
      */
     public void send_message(String message) {
         try {
-//            dataOutputStream.writeUTF(message);
-            throw new IOException();
+            dataOutputStream.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,10 +107,7 @@ public class SocketHandler {
         broadCast(response);
     }
 
-    public Socket_thread getSocketThread() {
-//        return new Socket_thread(this, dataInputStream, dataInputStream, outputStream, dataOutputStream, socket);
-        return null;
-    }
+
 
     public void broadCast(TextMessage message) {
         try {
@@ -119,4 +126,37 @@ public class SocketHandler {
         broadCast(textMessage);
     }
 
+    class Socket_thread implements Runnable {
+        Logger logger = LoggerFactory.getLogger(this.getClass());
+
+        public void run() {
+            while (true) {
+                try {
+                    listen();
+                } catch (IOException e) {
+                    close();
+                    break;
+                }
+            }
+        }
+
+        public void listen() throws IOException {
+            String a = dataInputStream.readUTF();
+            chatServer.messageListener(a);
+        }
+
+        public void close() {
+            try {
+                outputStream.close();
+                inputStream.close();
+                dataInputStream.close();
+                dataOutputStream.close();
+                socket.close();
+
+                logger.info("서버와 접속 끊어짐");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
