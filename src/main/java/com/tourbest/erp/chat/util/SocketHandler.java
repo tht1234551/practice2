@@ -21,6 +21,10 @@ public class SocketHandler {
 
     private ChatBridge chatBridge;
 
+    public void test(ChatBridge chatBridge) {
+        this.chatBridge = chatBridge;
+    }
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
     private ChatServer chatServer;
     private InputStream inputStream;

@@ -26,11 +26,13 @@ public class ChatBridge {
     private final SocketHandler socketHandler;
     private final WebSocketHandler webSocketHandler;
 
-//    @PostConstruct
-//    public void init() {
+    @PostConstruct
+    public void init() {
+        System.out.println("test<<<<<<<<<");
+        System.out.println(socketHandler);
 //        socketHandler.setChatBridge(this);
 //        webSocketHandler.setChatBridge(this);
-//    }
+    }
 
 
     public void socketToWebSocket(String payload){
