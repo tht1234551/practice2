@@ -1,8 +1,8 @@
-package com.tourbest.erp.chat.connection.management;
+package com.tourbest.erp.chat.socket.connection.management;
 
-import com.tourbest.erp.chat.connection.info.PayLoad;
-import com.tourbest.erp.chat.connection.info.SocketRequest;
-import com.tourbest.erp.chat.socket.SocketHandler;
+import com.tourbest.erp.chat.socket.connection.info.PayLoad;
+import com.tourbest.erp.chat.socket.connection.info.SocketRequest;
+import com.tourbest.erp.chat.socket.handler.SocketHandler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,24 +84,26 @@ public class SocketManager {
             e.printStackTrace();
         }
     }
-}
 
-@Slf4j
-class ThreadManager {
-    public static Thread getThread(SocketManager socketManager) {
-        return new Thread(() -> {
-            log.info("소켓간 통신을 시작합니다");
+    @Slf4j
+    static
+    class ThreadManager {
+        public static Thread getThread(SocketManager socketManager) {
+            return new Thread(() -> {
+                log.info("소켓간 통신을 시작합니다");
 
-            while (true) {
-                try {
-                    socketManager.listen();
-                } catch (IOException e) {
-                    socketManager.close();
-                    break;
+                while (true) {
+                    try {
+                        socketManager.listen();
+                    } catch (IOException e) {
+                        socketManager.close();
+                        break;
+                    }
                 }
-            }
 
-            log.info("소켓간 통신을 종료합니다");
-        });
+                log.info("소켓간 통신을 종료합니다");
+            });
+        }
     }
 }
+

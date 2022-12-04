@@ -1,11 +1,11 @@
-package com.tourbest.erp.chat.connection.info;
+package com.tourbest.erp.chat.socket.connection.info;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.WebSocketSession;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class SocketRequest {
 
-    private HttpServletRequest httpServletRequest;
+    private HttpSession httpSession;
     private WebSocketSession webSocketSession;
     private PayLoad payLoad;
     private List<PayLoad> unsent;

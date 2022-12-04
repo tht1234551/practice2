@@ -1,6 +1,6 @@
-package com.tourbest.erp.chat.connection.management;
+package com.tourbest.erp.chat.socket.connection.management;
 
-import com.tourbest.erp.chat.connection.info.SocketRequest;
+import com.tourbest.erp.chat.socket.connection.info.SocketRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

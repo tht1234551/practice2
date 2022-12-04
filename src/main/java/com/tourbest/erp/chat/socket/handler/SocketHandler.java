@@ -1,9 +1,9 @@
-package com.tourbest.erp.chat.socket;
+package com.tourbest.erp.chat.socket.handler;
 
-import com.tourbest.erp.chat.connection.info.PayLoad;
-import com.tourbest.erp.chat.connection.info.SocketRequest;
-import com.tourbest.erp.chat.connection.management.ConnectionManager;
-import com.tourbest.erp.chat.connection.management.SocketManager;
+import com.tourbest.erp.chat.socket.connection.info.PayLoad;
+import com.tourbest.erp.chat.socket.connection.info.SocketRequest;
+import com.tourbest.erp.chat.socket.connection.management.ConnectionManager;
+import com.tourbest.erp.chat.socket.connection.management.SocketManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

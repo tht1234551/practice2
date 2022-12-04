@@ -1,4 +1,4 @@
-package com.tourbest.erp.chat.connection.info;
+package com.tourbest.erp.chat.socket.connection.info;
 
 import lombok.Builder;
 import lombok.Data;

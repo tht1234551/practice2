@@ -1,8 +1,8 @@
 package com.tourbest.erp.chat;
 
-import com.tourbest.erp.chat.connection.info.PayLoad;
-import com.tourbest.erp.chat.connection.info.SocketRequest;
-import com.tourbest.erp.chat.socket.SocketBridge;
+import com.tourbest.erp.chat.socket.connection.info.PayLoad;
+import com.tourbest.erp.chat.socket.connection.info.SocketRequest;
+import com.tourbest.erp.chat.socket.handler.SocketBridge;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -30,12 +30,12 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/connect")
-    public String connect(HttpServletRequest request, HttpSession session, String ip, String port, String id) throws Exception {
+    public String connect(HttpSession session, String ip, String port, String id) throws Exception {
         SocketRequest socketRequestInfo = SocketRequest.builder()
                 .id(id)
                 .port(port)
                 .ip(ip)
-                .httpServletRequest(request)
+                .httpSession(session)
                 .payLoad(
                         PayLoad.builder()
                                 .senderId(id)

@@ -1,8 +1,8 @@
-package com.tourbest.erp.chat.socket;
+package com.tourbest.erp.chat.socket.handler;
 
-import com.tourbest.erp.chat.connection.info.PayLoad;
-import com.tourbest.erp.chat.connection.info.SocketRequest;
-import com.tourbest.erp.chat.connection.management.ConnectionManager;
+import com.tourbest.erp.chat.socket.connection.info.PayLoad;
+import com.tourbest.erp.chat.socket.connection.info.SocketRequest;
+import com.tourbest.erp.chat.socket.connection.management.ConnectionManager;
 import com.tourbest.erp.chat.util.QueryStringUtil;
 import com.tourbest.erp.util.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -114,7 +114,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
         SocketRequest socketRequest = manager.getSocketRequest(session);
 
         socketRequest.setPayLoad(
-                PayLoad.builder().payload("UserOut/" + socketRequest.getId())
+                PayLoad.builder()
+                        .payload("UserOut/" + socketRequest.getId())
                         .build()
         );
         bridge.sendSocketToSocket(socketRequest);
