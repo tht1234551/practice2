@@ -25,17 +25,17 @@ public class SocketHandler {
     private SocketBridge chatBridge;
     
 
-//    소켓 연결
+    // 소켓 연결
     public void connectSocket(SocketRequest socketRequestInfo) throws Exception {
         socketManager.connectSocket(socketRequestInfo);
     }
 
-//    소켓으로 보내기
+    // 소켓으로 보내기
     public void sendSocketToSocket(SocketRequest socketRequest) throws IOException {
         socketManager.send(socketRequest.getPayLoad());
     }
     
-//    소켓으로 받기
+    // 소켓으로 받기
     public void receiveSocketToSocket(PayLoad payload) throws IOException {
         chatBridge.receiveSocketToSocket(payload);
     }
