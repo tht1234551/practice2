@@ -6,10 +6,13 @@ window.onload = function () {
  * 초기화 함수
  */
 function init() {
-    const id = document.querySelector("#id").value;
+    const form = document.querySelector("#modelValues");
+    /** @type {Array<HTMLInputElement>} */
+    const inputs = [...form.querySelectorAll('input[name]')];
+    const values = inputs.reduce((res, {name, value}) => ({...res, [name]: value}), {})
 
     const app = new ChattingApplication({rooms: "#rooms", users: "#users"});
-    app.connect(id);
+    app.connect(values);
     app.addEventListener();
 }
 
@@ -53,10 +56,30 @@ class ChattingApplication {
     /**
      * 소켓 연결
      *
-     * @param {String} id
+     * @param {{
+     *     id: string;
+     *     port: int;
+     *     ip: string;
+     * }} values
      */
-    connect(id) {
-        this.websocket = new WebSocket("ws://localhost/chat?id=" + id)
+    connect(values) {
+        const queryString = this.getQueryString(values);
+        this.websocket = new WebSocket("ws://localhost/chat" + queryString);
+    }
+
+    /**
+     * 소켓 연결
+     *
+     * @param {{
+     *     id: string;
+     *     port: int;
+     *     ip: string;
+     * }} values
+     *
+     * @return {string}
+     */
+    getQueryString(values) {
+        return "?" + Object.entries(values).map(([key, value]) => key + '=' + value).join("&")
     }
 
     addEventListener() {
@@ -66,11 +89,11 @@ class ChattingApplication {
     }
 
     onopen(payload) {
-        console.log('connected')
+        console.log('connected', payload)
     }
 
     onclose(payload) {
-        console.log('disConnected')
+        console.log('disConnected', payload)
     }
 
     onmessage(payload) {

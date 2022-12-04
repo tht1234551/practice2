@@ -14,7 +14,11 @@
 </head>
 <body>
 
-<input id="id" value="${id}" hidden>
+<form id="modelValues" style="display: none;">
+    <input name="id" value="${id}">
+    <input name="port" value="${port}">
+    <input name="ip" value="${ip}">
+</form>
 
 <table border="1">
     <tr>

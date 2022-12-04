@@ -1,21 +1,23 @@
 package com.tourbest.erp.chat;
 
-import com.tourbest.erp.chat.util.ChatBridge;
+import com.tourbest.erp.chat.connection.info.PayLoad;
+import com.tourbest.erp.chat.connection.info.SocketRequest;
+import com.tourbest.erp.chat.socket.SocketBridge;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+@Slf4j
 @Controller
 @RequestMapping("/chat")
 @RequiredArgsConstructor
 public class ChatController {
-    Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final ChatBridge chatBridge;
+    private final SocketBridge bridge;
 
     @RequestMapping(value = "/view")
     public String view() {
@@ -23,18 +25,33 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/list")
-    public String list(Model model) {
+    public String list() {
         return "/chat/list";
     }
 
     @RequestMapping(value = "/connect")
-    public String connect(String ip, int port, String id, RedirectAttributes rttr) {
-        rttr.addFlashAttribute("ip", ip);
-        rttr.addFlashAttribute("port", port);
-        rttr.addFlashAttribute("id", id);
-        chatBridge.setIp(ip);
-        chatBridge.setPort(port);
-        chatBridge.setId(id);
-        return "redirect:/chat/list";
+    public String connect(HttpServletRequest request, HttpSession session, String ip, String port, String id) throws Exception {
+        SocketRequest socketRequestInfo = SocketRequest.builder()
+                .id(id)
+                .port(port)
+                .ip(ip)
+                .httpServletRequest(request)
+                .payLoad(
+                        PayLoad.builder()
+                                .senderId(id)
+                                .payload("NewUser/" + id)
+                                .build()
+                )
+                .build();
+
+        session.setAttribute("id", id);
+
+        try {
+            bridge.connectSocket(socketRequestInfo);
+            return "redirect:/chat/list";
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }
