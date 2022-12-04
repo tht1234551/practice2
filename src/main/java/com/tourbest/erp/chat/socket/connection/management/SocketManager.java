@@ -46,7 +46,21 @@ public class SocketManager {
     }
 
     public void createThread() {
-        thread = ThreadManager.getThread(this);
+        thread = new Thread(() -> {
+            log.info("소켓간 통신을 시작합니다");
+
+            while (true) {
+                try {
+                    listen();
+                } catch (IOException e) {
+                    close();
+                    break;
+                }
+            }
+
+            log.info("소켓간 통신을 종료합니다");
+        });
+
         thread.start();
     }
 
@@ -77,32 +91,12 @@ public class SocketManager {
             dataInputStream.close();
             dataOutputStream.close();
             socket.close();
+
             thread.interrupt();
 
             log.info("소켓 i/o가 닫혔습니다");
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    @Slf4j
-    static
-    class ThreadManager {
-        public static Thread getThread(SocketManager socketManager) {
-            return new Thread(() -> {
-                log.info("소켓간 통신을 시작합니다");
-
-                while (true) {
-                    try {
-                        socketManager.listen();
-                    } catch (IOException e) {
-                        socketManager.close();
-                        break;
-                    }
-                }
-
-                log.info("소켓간 통신을 종료합니다");
-            });
         }
     }
 }
