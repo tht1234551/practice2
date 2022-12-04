@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Slf4j
 @Data
@@ -44,6 +45,16 @@ public class SocketRequest {
         }
 
         return unsent;
+    }
+
+    @SuppressWarnings("unused")
+    public void setPayLoad(PayLoad payLoad) {
+        this.payLoad = payLoad;
+    }
+    public void setPayLoad(Consumer<PayLoad.PayLoadBuilder> consumer) {
+        PayLoad.PayLoadBuilder builder = PayLoad.builder();
+        consumer.accept(builder);
+        this.payLoad = builder.build();
     }
 
     // lombok 으로 사용중이라 경고를 뜨는것이라 무시하도록 처리

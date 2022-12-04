@@ -36,11 +36,10 @@ public class SocketBridge {
         log.info("소켓 연결 시도중");
 
         socketRequest.setPayLoad(
-                PayLoad.builder()
-                        // 원래의 서버 프로그램에서 접속시에는 아이디만 받게 되어있어 아이디만 세팅하도록 함
-                        .payload(socketRequest.getId())
-                        .build()
+                payLoadBuilder ->
+                        payLoadBuilder.payload(socketRequest.getId())
         );
+
 
         socketHandler.connectSocket(socketRequest);
         socketHandler.sendSocketToSocket(socketRequest);

@@ -31,11 +31,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private SocketBridge bridge;
 
 
-
     public void sendWebSocketToWebSocket(PayLoad payLoad) throws IOException {
         String receiver = payLoad.getReceiver();
 
-        if(StringUtil.isEmpty(receiver)) {
+        if (StringUtil.isEmpty(receiver)) {
             log.info("웹소켓으로 모든 사용자에게 메시지를 전송합니다");
             TextMessage message = new TextMessage(payLoad.get().getBytes());
 
@@ -66,12 +65,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         log.info("웹소켓에서 데이터를 받았습니다");
-        PayLoad payLoad = PayLoad.builder()
-                .payload(message.getPayload())
-                .build();
 
         SocketRequest socketRequest = manager.getSocketRequest(session);
-        socketRequest.setPayLoad(payLoad);
+        socketRequest.setPayLoad(
+                payLoadBuilder ->
+                        payLoadBuilder.payload(message.getPayload())
+        );
 
         bridge.receiveWebSocketToWebSocket(socketRequest);
     }
@@ -99,11 +98,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         // 자기 자신도 추가되었다는걸 웹소켓으로 알려줌
         sendWebSocketToWebSocket(
-            PayLoad.builder()
-                    .senderId("SERVER")
-                    .receiver(id)
-                    .payload("NewUser/" + id)
-                    .build()
+                PayLoad.builder()
+                        .senderId("SERVER")
+                        .receiver(id)
+                        .payload("NewUser/" + id)
+                        .build()
         );
 
         log.info("웹소켓이 연결되었습니다");
@@ -114,16 +113,16 @@ public class WebSocketHandler extends TextWebSocketHandler {
         SocketRequest socketRequest = manager.getSocketRequest(session);
 
         socketRequest.setPayLoad(
-                PayLoad.builder()
-                        .payload("UserOut/" + socketRequest.getId())
-                        .build()
+                payLoadBuilder ->
+                        payLoadBuilder.payload("UserOut/" + socketRequest.getId())
         );
+
         bridge.sendSocketToSocket(socketRequest);
 
         if (manager.disconnectUser(session)) {
             log.info("사용자를 접속자에서 제거 했습니다");
         } else {
-            log.info("사용자는 접속자가 아닙니다");
+            log.info("사용자를 접속자 정보에서 찾지 못했습니다");
         }
 
         log.info("웹소켓 연결이 종료되었습니다");
