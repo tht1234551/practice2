@@ -31,7 +31,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private SocketBridge bridge;
 
 
-    public void sendWebSocketToWebSocket(PayLoad payLoad) throws IOException {
+    public void send(PayLoad payLoad) throws IOException {
         String receiver = payLoad.getReceiver();
 
         if (StringUtil.isEmpty(receiver)) {
@@ -72,7 +72,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         payLoadBuilder.payload(message.getPayload())
         );
 
-        bridge.receiveWebSocketToWebSocket(socketRequest);
+        bridge.onReceiveWebSocket(socketRequest);
     }
 
     @Override
@@ -92,12 +92,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
         List<PayLoad> unsent = socketRequest.getUnsent();
         for (PayLoad payload : unsent) {
             payload.setReceiver(id);
-            sendWebSocketToWebSocket(payload);
+            send(payload);
         }
         unsent.clear();
 
         // 자기 자신도 추가되었다는걸 웹소켓으로 알려줌
-        sendWebSocketToWebSocket(
+        send(
                 PayLoad.builder()
                         .senderId("SERVER")
                         .receiver(id)
@@ -117,7 +117,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         payLoadBuilder.payload("UserOut/" + socketRequest.getId())
         );
 
-        bridge.sendSocketToSocket(socketRequest);
+        bridge.sendSocket(socketRequest);
 
         if (manager.disconnectUser(session)) {
             log.info("사용자를 접속자에서 제거 했습니다");
