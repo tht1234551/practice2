@@ -52,6 +52,7 @@
                 <tr>
                     <td>
                         <button id="joinRoom">채팅방참여</button>
+                        <button id="exitRoom" style="display: none">방 나가기</button>
                     </td>
                 </tr>
                 <tr>
@@ -67,14 +68,16 @@
             <table>
                 <tr>
                     <td>
-                        <textarea style="height: 436px; width: 507px;"></textarea>
+                        <textarea id="msg" style="height: 436px; width: 507px;" readonly></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td style="display: flex; justify-content: center; align-items: center;">
-                        <textarea style="width: 80%;"></textarea>
-                        <button style="height: 100%; height: 36px;">전송</button>
-                        <button style="height: 100%; height: 36px;">파일</button>
+                    <td>
+                        <form style="display: flex; justify-content: center; align-items: center;">
+                            <input id="sendMsg" type="text" style="width: 80%;" multiple>
+                            <button id="sendChatting" style="height: 100%; height: 36px;">전송</button>
+                            <button id="sendFile" style="height: 100%; height: 36px;">파일</button>
+                        </form>
                     </td>
                 </tr>
 
@@ -83,7 +86,6 @@
     </tr>
 </table>
 
-<button id="disconnect">disconnect</button>
 <script src="${pageContext.request.contextPath}/js/views/chat/list.js"></script>
 
 </body>

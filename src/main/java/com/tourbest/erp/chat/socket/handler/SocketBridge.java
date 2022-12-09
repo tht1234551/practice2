@@ -39,7 +39,6 @@ public class SocketBridge {
 
     }
 
-
     @Description("웹소켓으로 응답받았을 때")
     public void onReceiveWebSocket(SocketRequest socketRequest) throws IOException {
         socketHandler.send(socketRequest);
@@ -47,10 +46,9 @@ public class SocketBridge {
     
     @Description("웹소켓으로 전송")
     public void sendWebSocket(SocketRequest socketRequest) throws IOException {
-        webSocketHandler.send(null);
+        webSocketHandler.send(socketRequest.getPayLoad());
     }
 
-    
     @Description("소켓으로 응답받았을 때")
     public void onReceiveSocket(PayLoad payload) throws IOException {
         // 웹소켓으로 전송해줌

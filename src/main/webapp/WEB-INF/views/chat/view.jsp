@@ -17,19 +17,19 @@ chat
     <tr>
         <td width="100">Server Ip</td>
         <td width="200">
-            <input name="ip" type="text">
+            <input name="ip" type="text" value="localhost">
         </td>
     </tr>
     <tr>
         <td>Server Port</td>
         <td>
-            <input name="port" type="text">
+            <input name="port" type="text" value="1234">
         </td>
     </tr>
     <tr>
         <td>ID</td>
         <td>
-            <input name="id" type="text">
+            <input name="id" type="text" value="web">
         </td>
     </tr>
     <tr>

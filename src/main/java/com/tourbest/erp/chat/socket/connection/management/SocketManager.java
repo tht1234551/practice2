@@ -22,19 +22,23 @@ public class SocketManager {
     @SuppressWarnings("FieldMayBeFinal")
     private SocketHandler socketHandler;
 
+    private SocketRequest socketRequest;
+
     public SocketManager(SocketHandler socketHandler) {
         this.socketHandler = socketHandler;
     }
 
     public void connectSocket(SocketRequest socketRequest) throws Exception {
-        openSocket(socketRequest);
+        this.socketRequest = socketRequest;
+
+        openSocket();
         openStream();
         createThread();
 
-        setSocketRequest(socketRequest);
+        setSocketRequest();
     }
 
-    public void openSocket(SocketRequest socketRequest) throws IOException {
+    public void openSocket() throws IOException {
         socket = new Socket(socketRequest.getIp(), socketRequest.getPort());
     }
 
@@ -47,24 +51,25 @@ public class SocketManager {
 
     public void createThread() {
         thread = new Thread(() -> {
-            log.info("소켓간 통신을 시작합니다");
-
             while (true) {
                 try {
                     listen();
                 } catch (IOException e) {
+                    socketHandler.afterConnectionClosed(socketRequest);
+                    close();
+                    break;
+                } catch (Exception e) {
+                    e.printStackTrace();
                     close();
                     break;
                 }
             }
-
-            log.info("소켓간 통신을 종료합니다");
         });
 
         thread.start();
     }
 
-    public void setSocketRequest(SocketRequest socketRequest) {
+    public void setSocketRequest() {
         socketRequest.setSocket(socket);
         socketRequest.setThread(thread);
         socketRequest.setThreadStopFunction(this::close);
@@ -72,12 +77,12 @@ public class SocketManager {
 
     public void listen() throws IOException {
         String response = dataInputStream.readUTF();
-        log.info("소켓으로 수신했습니다 response : " + response);
+
         PayLoad payLoad = PayLoad
                 .builder()
                 .payload(response)
                 .build();
-        socketHandler.receiveSocketToSocket(payLoad);
+        socketHandler.handleTextMessage(payLoad);
     }
 
     public void send(PayLoad payload) throws IOException {
@@ -94,7 +99,6 @@ public class SocketManager {
 
             thread.interrupt();
 
-            log.info("소켓 i/o가 닫혔습니다");
         } catch (Exception e) {
             e.printStackTrace();
         }
